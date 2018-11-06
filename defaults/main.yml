@@ -4,6 +4,9 @@
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 git_download_wordpress_use_bedrock: false
 
+# Is this installation on a shared server?
+git_download_wordpress_using_shared_server: false
+
 # The default git repo to use when downloading and installing the application
 git_download_wordpress_git_repo: "git@github.com:WordPress/WordPress.git"
 
@@ -12,6 +15,7 @@ git_download_wordpress_bedrock_git_repo: "git@github.com:roots/bedrock.git"
 
 # If you are using your own forked repo an want to use a branch instead of a tagged release then fill in a value and comment out the "tagged_release_version" variable 
 git_download_wordpress_git_branch: ""
+
 
 # The database to create when setting up the application
 git_download_wordpress_db_name: "wordpress"
@@ -24,6 +28,9 @@ git_download_wordpress_db_collation: "utf8mb4_unicode_ci"
 
 # The fqdn or IP address of where the application database will be connecting to. Default is 'localhost'
 git_download_wordpress_db_host: "localhost"
+
+# Hostname of Nagios server that is allowed to interact with the check_wordpress_updates.php script?
+git_download_wordpress_update_check_script_nagios_server_fqdn: 'atlprocessfast.dyndns.org'
 
 # Disable All Updates
 # By default automatic updates are enabled, set this value to true to disable all automatic updates
