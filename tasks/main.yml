@@ -8,22 +8,26 @@
   package: name={{ item }}  
   with_items: 
   - git
-  - php7.0
-  - php7.0-mbstring
-  - php7.0-mysql
-  - libapache2-mod-php7.0
-  - php7.0-mcrypt
-  - php7.0-curl
-  - php7.0-json
-  - php7.0-sqlite3
-  - php7.0-zip
-  - php7.0-xml
+  - php7.2
+  - php7.2-mbstring
+  - php7.2-mysql
+  - libapache2-mod-php7.2
+  - libsodium23
+  - php-libsodium
+  - libsodium-dev
+  - php7.2-curl
+  - php7.2-json
+  - php7.2-sqlite3
+  - php7.2-zip
+  - php7.2-xml
   - php-imap
-  - php7.0-bcmath
-  - php7.0-intl
-  - php7.0-odbc
-  - php7.0-soap
-  - php7.0-gd
+  - php7.2-cli
+  - php7.2-fpm
+  - php7.2-bcmath
+  - php7.2-intl
+  - php7.2-odbc
+  - php7.2-soap
+  - php7.2-gd
   notify: 
   - restart-apache
   when: git_download_wordpress_manage_packages
@@ -88,7 +92,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: MySQLi
     option: mysqli.allow_local_infile
     value: 0
@@ -96,7 +100,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: memory_limit
     value: 756M
@@ -104,7 +108,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: post_max_size
     value: 64M
@@ -112,7 +116,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: upload_max_filesize
     value: 64M
@@ -120,7 +124,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: max_input_time
     value: 60
@@ -128,7 +132,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: max_execution_time
     value: 300
@@ -142,7 +146,7 @@
 # The timezone for PHP and for the OS need to be set to UTC for sync integrations to work properly
 - name: "Set timezone in PHP ini file"
   ini_file: 
-    path: /etc/php/7.0/apache2/php.ini
+    path: /etc/php/7.2/apache2/php.ini
     section: PHP
     option: date.timezone
     value: UTC
