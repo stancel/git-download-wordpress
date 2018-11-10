@@ -248,8 +248,8 @@
 - name: populate service facts
   service_facts:
 
-- debug:
-    var: ansible_facts.services
+#- debug:
+#    var: ansible_facts.services
 
 - name: "Copying over wp-config.php to server"
   template:
@@ -278,8 +278,8 @@
 
 - name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
   template:
-    src: 'wp-config.php.j2'
-    dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/wp-config.php"
+    src: 'check_wordpress_updates.php.j2'
+    dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/check_wordpress_updates.php"
     owner: "{{ git_download_wordpress_web_user }}"
     group: "{{ git_download_wordpress_web_group }}"
     mode: 0644
