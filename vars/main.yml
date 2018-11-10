@@ -41,10 +41,10 @@ NONCE_SALT='TstVP3lXP@|R7]B]Hh(AQ9pV^RT.][hg-:`o$x;S1B;3O08uYF?oNr.H=Iq!w:{p'
 #git_download_wordpress_using_shared_server: false
 
 # The default git repo to use when downloading and installing the application
-#git_download_wordpress_git_repo: "git@github.com:WordPress/WordPress.git"
+#git_download_wordpress_git_repo: "https://github.com/WordPress/WordPress.git"
 
 # The default git repo for downloading and installing Bedrock Wordpress
-#git_download_wordpress_bedrock_git_repo: "git@github.com:roots/bedrock.git"
+#git_download_wordpress_bedrock_git_repo: "https://github.com/roots/bedrock.git"
 
 # If you are using your own forked repo an want to use a branch instead of a tagged release then fill in a value and comment out the "tagged_release_version" variable 
 #git_download_wordpress_git_branch: ""
