@@ -4,6 +4,9 @@
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 git_download_wordpress_use_bedrock: false
 
+# URL of the website. Not required or used unless using WP Bedrock
+git_download_wordpress_wp_home: "https://mywebsite.com"
+
 # Is this installation on a shared server?
 git_download_wordpress_using_shared_server: false
 
@@ -30,7 +33,7 @@ git_download_wordpress_db_collation: "utf8mb4_unicode_ci"
 git_download_wordpress_db_host: "localhost"
 
 # Hostname of Nagios server that is allowed to interact with the check_wordpress_updates.php script?
-git_download_wordpress_update_check_script_nagios_server_fqdn: 'atlprocessfast.dyndns.org'
+git_download_wordpress_update_check_script_nagios_server_fqdn: "{{ lookup('env', 'NAGIOS_SERVER_FQDN') }}"
 
 # Disable All Updates
 # By default automatic updates are enabled, set this value to true to disable all automatic updates

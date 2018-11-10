@@ -16,11 +16,29 @@ git_download_wordpress_db_password: "some-really-secure-password"
 # The root password for your MySQL, MariaDB or Percona Server DB instance to create the DB and user.
 git_download_wordpress_mysql_root_password: "your MySQL root password"
 
+# Generate your keys here: https://roots.io/salts.html and paste them into this variable (for now)
+git_download_wordpress_salts_and_keys: "
+AUTH_KEY='XxeeJpcu2}Q&xO$X9Ad&;SyX20H1T_%z69<m|aO>KYOJ90i6RICMi8+c{yK)zNe3'
+SECURE_AUTH_KEY='Yrd6#wz3QN6J2owve9OnjL$v#nT7xUyl`s/3.nHbGPiX);z9P-<(Z69&4<_26S_6'
+LOGGED_IN_KEY='eHEigHBWSe2q6&26Eo/ivH``])F75zC97vt9x,`pm!*,3Ef@xEqw[rfWCUyp3UW>'
+NONCE_KEY='y+[N9k4SZe>#VH!^af0)We#.-);lFo1A5dTBdGntvkpt.e8wL){__>:Q{2ZcTATo'
+AUTH_SALT='{S*k@D.j@p1loh@to>k8Z]gx0A<y>6+%B5,Y%N=(m$-yaay{;Vxy<7AI_i2LyH[3'
+SECURE_AUTH_SALT='2M]CCKAa%IuER[6a8RVW<>=dp`;Z?E>P!e&CM^RC;pxln$=13<i6k6;Vx&Rl5cv:'
+LOGGED_IN_SALT='A[Ecv?CI.E-mJX:sEBB?Sil?,fekng,uc,5g9Aq0{i8/DU-h(-TUtz0S1x6lb$h6'
+NONCE_SALT='TstVP3lXP@|R7]B]Hh(AQ9pV^RT.][hg-:`o$x;S1B;3O08uYF?oNr.H=Iq!w:{p'
+"
+
 
 #####     Optional Variables      #####
 
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 #git_download_wordpress_use_bedrock: false
+
+# URL of the website. Not required or used unless using WP Bedrock
+#git_download_wordpress_wp_home: "https://mywebsite.com"
+
+# Is this installation on a shared server?
+#git_download_wordpress_using_shared_server: false
 
 # The default git repo to use when downloading and installing the application
 #git_download_wordpress_git_repo: "git@github.com:WordPress/WordPress.git"

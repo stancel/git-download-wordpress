@@ -1,16 +1,21 @@
 ---
 # handlers file for git-download-wordpress
 
-- name: restart-apache
+- name: "restart-apache"
+  become: true
   service: 
     name: apache2 
     state: restarted
+  ignore_errors: true
+  listen: "restart webserver"
 
-- name: restart nginx
+- name: "restart nginx"
+  become: true
   service: 
     name: nginx 
     state: restarted
-    enabled: yes
+  ignore_errors: true
+  listen: "restart webserver"
 
 
 

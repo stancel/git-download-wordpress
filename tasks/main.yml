@@ -12,6 +12,7 @@
   - php7.2-mbstring
   - php7.2-mysql
   - libapache2-mod-php7.2
+  - php-fpm
   - libsodium23
   - php-libsodium
   - libsodium-dev
@@ -29,7 +30,7 @@
   - php7.2-soap
   - php7.2-gd
   notify: 
-  - restart-apache
+  - "restart webserver"
   when: git_download_wordpress_manage_packages
 
 - name: 'Upgrade APT to the latest packages'
@@ -92,7 +93,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: MySQLi
     option: mysqli.allow_local_infile
     value: 0
@@ -100,7 +101,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: memory_limit
     value: 756M
@@ -108,7 +109,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: post_max_size
     value: 64M
@@ -116,7 +117,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: upload_max_filesize
     value: 64M
@@ -124,7 +125,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: max_input_time
     value: 60
@@ -132,7 +133,7 @@
 
 - name: "Changing PHP ini file options"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: max_execution_time
     value: 300
@@ -146,7 +147,7 @@
 # The timezone for PHP and for the OS need to be set to UTC for sync integrations to work properly
 - name: "Set timezone in PHP ini file"
   ini_file: 
-    path: /etc/php/7.2/apache2/php.ini
+    path: /etc/php/7.2/fpm/php.ini
     section: PHP
     option: date.timezone
     value: UTC
@@ -187,11 +188,27 @@
 
 ##  Deploy files from Git repo
 
-- name: "Git clone the repo"
-  command: git clone {{ git_download_wordpress_git_repo }} {{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}
-  args: 
-    chdir: "{{ git_download_wordpress_web_files_path }}"
-  when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade")
+- name: "Clone the standard version of WordPress - the default"
+  block:
+
+    - name: "Git clone the standard WordPress repo"
+      command: git clone {{ git_download_wordpress_git_repo }} {{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}
+      args: 
+        chdir: "{{ git_download_wordpress_web_files_path }}"
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade")
+
+  when: git_download_wordpress_use_bedrock == false
+
+- name: "Clone the Bedrock version of WordPress"
+  block:
+
+    - name: "Git clone the WP Bedrock repo"
+      command: git clone {{ git_download_wordpress_bedrock_git_repo }} {{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}
+      args: 
+        chdir: "{{ git_download_wordpress_web_files_path }}"
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade")
+
+  when: git_download_wordpress_use_bedrock
 
 - name: "Debugging the git_download_wordpress_git_branch variable"
   debug: var=git_download_wordpress_git_branch
@@ -251,30 +268,56 @@
 #- debug:
 #    var: ansible_facts.services
 
-- name: "Copying over wp-config.php to server"
-  template:
-    src: 'htaccess.j2'
-    dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/.htaccess"
-    owner: "{{ git_download_wordpress_web_user }}"
-    group: "{{ git_download_wordpress_web_group }}"
-    mode: 0644
-  when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
-          and ("'apache2' in services")
+- name: "Block for Standard version of WordPress - the default"
+  block:
 
-- name: "Fetch random salts for WordPress config"
-  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
-  register: "wp_salt"
-  become: no
-  become_method: sudo
+    - name: "Copying over .htaccess to Apache webserver"
+      template:
+        src: 'htaccess.j2'
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/.htaccess"
+        owner: "{{ git_download_wordpress_web_user }}"
+        group: "{{ git_download_wordpress_web_group }}"
+        mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+              and ("'apache2' in services")
 
-- name: "Copying over wp-config.php to server"
-  template:
-    src: 'wp-config.php.j2'
-    dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/wp-config.php"
-    owner: "{{ git_download_wordpress_web_user }}"
-    group: "{{ git_download_wordpress_web_group }}"
-    mode: 0644
-  when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+    - name: "Fetch random salts for WordPress config"
+      local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+      register: "wp_salt"
+      become: no
+      become_method: sudo
+
+    - name: "Copying over wp-config.php to server"
+      template:
+        src: 'wp-config.php.j2'
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/wp-config.php"
+        owner: "{{ git_download_wordpress_web_user }}"
+        group: "{{ git_download_wordpress_web_group }}"
+        mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+
+  when: git_download_wordpress_use_bedrock == false
+
+- name: "Block for Bedrock version of WordPress"
+  block:
+
+#  See this to implement - https://github.com/aaemnnosttv/wp-cli-dotenv-command#salts
+#    - name: "Stub to remember to generate salts automatically versus putting them into a variable"
+#      local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+#      register: "wp_salt"
+#      become: no
+#      become_method: sudo
+
+    - name: "Copying over .env to server"
+      template:
+        src: 'env.j2'
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/../.env"
+        owner: "{{ git_download_wordpress_web_user }}"
+        group: "{{ git_download_wordpress_web_group }}"
+        mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+
+  when: git_download_wordpress_use_bedrock == false
 
 - name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
   template:
@@ -293,7 +336,7 @@
 - name: "Install Composer packages"
   composer: 
     command: install
-    working_dir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}"
+    working_dir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/../"
   when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
           and (git_download_wordpress_use_bedrock == true)
 
@@ -353,7 +396,7 @@
     mode: 0640
   when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade")
   ignore_errors: true
-  notify: restart-apache
+  notify: "restart webserver"
 
 ##  End - Set proper permissions for web application / site
 
