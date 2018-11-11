@@ -11,17 +11,12 @@
   - php7.2
   - php7.2-mbstring
   - php7.2-mysql
-  - libapache2-mod-php7.2
-  - php-fpm
-  - libsodium23
-  - php-libsodium
-  - libsodium-dev
   - php7.2-curl
   - php7.2-json
   - php7.2-sqlite3
   - php7.2-zip
   - php7.2-xml
-  - php-imap
+  - php7.2-imap
   - php7.2-cli
   - php7.2-fpm
   - php7.2-bcmath
@@ -29,6 +24,11 @@
   - php7.2-odbc
   - php7.2-soap
   - php7.2-gd
+#  - libapache2-mod-php7.2
+#  - php-fpm
+#  - libsodium23
+#  - php-libsodium
+#  - libsodium-dev
   notify: 
   - "restart webserver"
   when: git_download_wordpress_manage_packages
@@ -296,6 +296,15 @@
         mode: 0644
       when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
 
+    - name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
+      template:
+        src: 'check_wordpress_updates.php.j2'
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/check_wordpress_updates.php"
+        owner: "{{ git_download_wordpress_web_user }}"
+        group: "{{ git_download_wordpress_web_group }}"
+        mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+
   when: git_download_wordpress_use_bedrock == false
 
 - name: "Block for Bedrock version of WordPress"
@@ -311,22 +320,22 @@
     - name: "Copying over .env to server"
       template:
         src: 'env.j2'
-        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/../.env"
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/.env"
         owner: "{{ git_download_wordpress_web_user }}"
         group: "{{ git_download_wordpress_web_group }}"
         mode: 0644
       when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
 
-  when: git_download_wordpress_use_bedrock == false
+    - name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
+      template:
+        src: 'check_wordpress_updates.php.j2'
+        dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/web/check_wordpress_updates.php"
+        owner: "{{ git_download_wordpress_web_user }}"
+        group: "{{ git_download_wordpress_web_group }}"
+        mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
 
-- name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
-  template:
-    src: 'check_wordpress_updates.php.j2'
-    dest: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/check_wordpress_updates.php"
-    owner: "{{ git_download_wordpress_web_user }}"
-    group: "{{ git_download_wordpress_web_group }}"
-    mode: 0644
-  when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+  when: git_download_wordpress_use_bedrock
 
 ##  End - Handle any template files and schedulers/cron jobs
 
@@ -336,7 +345,9 @@
 - name: "Install Composer packages"
   composer: 
     command: install
-    working_dir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}/../"
+    working_dir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}"
+#  become: yes
+#  become_user: "{{ git_download_wordpress_web_user }}"
   when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
           and (git_download_wordpress_use_bedrock == true)
 
