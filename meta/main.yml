@@ -1,7 +1,7 @@
 galaxy_info:
   author: 'Brad Stancel'
   
-  description: Downloads and installs a chosen release of WordPress to the default document root for the Apache webserver (Nginx currently being added), or other chosen path/document root directory.
+  description: "Downloads and installs a chosen release of WordPress or Bedrock WP to a specified path. Also installs PHP 7.2, Composer, updates PHP config options for NginX and sets up needed templates."
   
   company: YourOnlineDept.com
 
@@ -21,7 +21,9 @@ galaxy_info:
 
   galaxy_tags: 
     - wordpress
-    - cms
+    - installs
     - php
+    - composer
 
-dependencies: []
+dependencies: 
+  - sbaerlocher.wp-cli

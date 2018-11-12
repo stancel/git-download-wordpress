@@ -24,11 +24,6 @@
   - php7.2-odbc
   - php7.2-soap
   - php7.2-gd
-#  - libapache2-mod-php7.2
-#  - php-fpm
-#  - libsodium23
-#  - php-libsodium
-#  - libsodium-dev
   notify: 
   - "restart webserver"
   when: git_download_wordpress_manage_packages
@@ -310,13 +305,6 @@
 - name: "Block for Bedrock version of WordPress"
   block:
 
-#  See this to implement - https://github.com/aaemnnosttv/wp-cli-dotenv-command#salts
-#    - name: "Stub to remember to generate salts automatically versus putting them into a variable"
-#      local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
-#      register: "wp_salt"
-#      become: no
-#      become_method: sudo
-
     - name: "Copying over .env to server"
       template:
         src: 'env.j2'
@@ -324,6 +312,18 @@
         owner: "{{ git_download_wordpress_web_user }}"
         group: "{{ git_download_wordpress_web_group }}"
         mode: 0644
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+
+    - name: "Install the aaemnnosttv/wp-cli-dotenv-command package"
+      command: wp package install aaemnnosttv/wp-cli-dotenv-command --allow-root
+      args: 
+        chdir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}"
+      when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
+
+    - name: "Run the WP CLI package, dotenv, to generate salts and keys for WP Bedrock .env file"
+      command: wp dotenv salts regenerate --allow-root
+      args: 
+        chdir: "{{ git_download_wordpress_web_files_path }}{{ git_download_wordpress_web_directory_for_application }}"
       when: (git_download_wordpress_installation_type == "new" or git_download_wordpress_installation_type == "upgrade") 
 
     - name: "Copying over check_wordpress_updates.php script to server - used with Nagios to see if updates are needed"
