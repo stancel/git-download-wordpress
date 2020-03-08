@@ -15,6 +15,7 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - bionic
+    - xenial
   - name: Debian
     versions:
     - stretch

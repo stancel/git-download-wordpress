@@ -1,24 +1,36 @@
 ---
-# defaults file for git-download-wordpress, will be used if any of these have been defined elsewhere
+# defaults file for stancel.git_download_wordpress, will be used if any of these have been defined elsewhere
 
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 git_download_wordpress_use_bedrock: false
 
-# URL of the website. Not required or used unless using WP Bedrock
-git_download_wordpress_wp_home: "https://mywebsite.com"
-
 # Is this installation on a shared server?
 git_download_wordpress_using_shared_server: false
 
+# Using a different repo for Bedrock WP other than the official Bedrock one? 
+# If you have a client specific one or template already saved, put it here. Must be in format: git@github.com:ProcessFast/processfast-wp-bedrock.git
+# Leave as an empty string "" if you want to use default Bedrock repo.
+git_download_wordpress_custom_bedrock_git_repo: ""
+
+# Using a different repo for Standard WP other than the official Standard WP one? 
+# If you have a client specific one or template already saved, put it here. Must be in format: git@github.com:ProcessFast/processfast-wp-standard.git
+# Leave as an empty string "" if you want to use default Standard WP repo.
+git_download_wordpress_custom_standard_wp_git_repo: ""
+
 # The default git repo to use when downloading and installing the application
-git_download_wordpress_git_repo: "git@github.com:WordPress/WordPress.git"
+git_download_standard_wordpress_git_repo: "git@github.com:WordPress/WordPress.git"
 
 # The default git repo for downloading and installing Bedrock Wordpress
-git_download_wordpress_bedrock_git_repo: "git@github.com:roots/bedrock.git"
+git_download_wordpress_standard_bedrock_git_repo: "git@github.com:roots/bedrock.git"
+
+# The default git repo to use when downloading and installing the application
+git_download_wordpress_git_repo: "{{ (git_download_wordpress_custom_standard_wp_git_repo != '') | ternary( git_download_wordpress_custom_standard_wp_git_repo, git_download_standard_wordpress_git_repo ) }}" 
+
+# The default git repo for downloading and installing Bedrock Wordpress
+git_download_wordpress_bedrock_git_repo: "{{ (git_download_wordpress_custom_bedrock_git_repo != '') | ternary( git_download_wordpress_custom_bedrock_git_repo, git_download_wordpress_standard_bedrock_git_repo ) }}"
 
 # If you are using your own forked repo an want to use a branch instead of a tagged release then fill in a value and comment out the "tagged_release_version" variable 
 git_download_wordpress_git_branch: ""
-
 
 # The database to create when setting up the application
 git_download_wordpress_db_name: "wordpress"
