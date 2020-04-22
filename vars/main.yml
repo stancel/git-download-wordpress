@@ -21,6 +21,9 @@ git_download_wordpress_wp_home: "https://mywebsite.com"
 
 #####     Optional Variables      #####
 
+# PHP Version to use (default currently 7.2)
+#git_download_wordpress_php_version: 7.2
+
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 #git_download_wordpress_use_bedrock: false
 

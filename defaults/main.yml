@@ -1,6 +1,9 @@
 ---
 # defaults file for stancel.git_download_wordpress, will be used if any of these have been defined elsewhere
 
+# PHP Version to use (default currently 7.2)
+git_download_wordpress_php_version: 7.2
+
 # Boolean as to whether to use standard Wordpress (default) or Bedrock WP (https://roots.io/bedrock/)
 git_download_wordpress_use_bedrock: false
 

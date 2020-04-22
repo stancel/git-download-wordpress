@@ -65,12 +65,18 @@ Is this installation on a shared server? The default is false.
 	git_download_wordpress_using_shared_server: false
 ```
 
+PHP Version to use (default is 7.2)
+
+```
+    git_download_wordpress_php_version: 7.2
+```
+
 Using a different repo for Bedrock WP other than the official Bedrock one? 
 If you have a client specific one or template already saved, put it here. Must be in format: git@github.com:ProcessFast/processfast-wp-bedrock.git
 Leave as an empty string "" if you want to use default Bedrock repo.
 
 ```
-git_download_wordpress_custom_bedrock_git_repo: ""
+    git_download_wordpress_custom_bedrock_git_repo: ""
 ```
 
 Using a different repo for Standard WP other than the official Standard WP one? 
@@ -78,7 +84,7 @@ If you have a client specific one or template already saved, put it here. Must b
 Leave as an empty string "" if you want to use default Standard WP repo.
 
 ```
-git_download_wordpress_custom_standard_wp_git_repo: ""
+    git_download_wordpress_custom_standard_wp_git_repo: ""
 ```
 
 The default git repo to use when downloading and installing a standard WP application
