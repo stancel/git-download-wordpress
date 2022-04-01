@@ -3,6 +3,7 @@
 
 
 ##  Handle any dependencies
+# Some of these packages installed due to this - https://make.wordpress.org/hosting/handbook/handbook/server-environment/
 
 - name: "Install Git and other needed packages"
   package: name={{ item }}  
@@ -13,7 +14,6 @@
   - php{{ git_download_wordpress_php_version }}-common
   - php{{ git_download_wordpress_php_version }}-mysql
   - php{{ git_download_wordpress_php_version }}-curl
-  - php{{ git_download_wordpress_php_version }}-json
   - php{{ git_download_wordpress_php_version }}-sqlite3
   - php{{ git_download_wordpress_php_version }}-zip
   - php{{ git_download_wordpress_php_version }}-xml
@@ -29,6 +29,19 @@
   - php{{ git_download_wordpress_php_version }}-opcache
   - php{{ git_download_wordpress_php_version }}-xml
   - php{{ git_download_wordpress_php_version }}-xmlrpc
+  - php{{ git_download_wordpress_php_version }}-odbc
+  - php{{ git_download_wordpress_php_version }}-ldap
+  - php{{ git_download_wordpress_php_version }}-imap
+  - php{{ git_download_wordpress_php_version }}-gmp
+  - php{{ git_download_wordpress_php_version }}-gd
+  - php{{ git_download_wordpress_php_version }}-bz2
+  - php-mime-type
+  - php-libsodium
+  - php-imagick
+  - php-yaml
+  - php-redis
+  - php-readline
+  - php-igbinary
   notify: 
   - "restart webserver"
   when: git_download_wordpress_manage_packages
@@ -237,7 +250,7 @@
 
 - name: "Install Python MySQL bindings required for Ansible MySQL module"
   apt: 
-    name: python-mysqldb 
+    name: python3-mysqldb 
     state: present
 
 - name: "MYSQL | Create {{git_download_wordpress_db_name}} database"
@@ -262,8 +275,8 @@
 
 ##  Handle any template files and schedulers/cron jobs
 
-- name: populate service facts
-  service_facts:
+#- name: populate service facts
+#  service_facts:
 
 #- debug:
 #    var: ansible_facts.services
