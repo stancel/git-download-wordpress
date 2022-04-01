@@ -26,7 +26,7 @@ Is this instance to be used for a "dev", "qa" or "prod" environment? Only "prod"
 Choose the git tagged release that you would like to download and install. Comment this out if using a git branch instead.
 
 ```
-	git_download_wordpress_tagged_release_version: "5.3.2"
+	git_download_wordpress_tagged_release_version: "5.9.2"
 ```
 
 The DB user to create when to be used by the application
@@ -65,10 +65,10 @@ Is this installation on a shared server? The default is false.
 	git_download_wordpress_using_shared_server: false
 ```
 
-PHP Version to use (default is 7.2)
+PHP Version to use (default is 8.1)
 
 ```
-    git_download_wordpress_php_version: 7.2
+    git_download_wordpress_php_version: 8.1
 ```
 
 Using a different repo for Bedrock WP other than the official Bedrock one? 

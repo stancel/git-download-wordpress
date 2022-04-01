@@ -1,7 +1,7 @@
 galaxy_info:
   author: 'Brad Stancel'
   
-  description: "Downloads and installs a chosen release of WordPress or Bedrock WP to a specified path. Also installs PHP 7.2, Composer, updates PHP config options for NginX and sets up needed templates."
+  description: "Downloads and installs a chosen release of WordPress or Bedrock WP to a specified path. Also installs PHP 8.1, Composer, updates PHP config options for NginX and sets up needed templates."
   
   company: YourOnlineDept.com
 
@@ -14,11 +14,9 @@ galaxy_info:
   platforms:
   - name: Ubuntu
     versions:
+    - jammy
+    - focal
     - bionic
-    - xenial
-  - name: Debian
-    versions:
-    - stretch
 
   galaxy_tags: 
     - wordpress
