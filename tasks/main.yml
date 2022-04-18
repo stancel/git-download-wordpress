@@ -108,7 +108,6 @@
 
 ##  End - Handle any dependencies
 
-
 ##  Set needed PHP configuration
 
 - name: "Changing PHP ini file options"
@@ -161,7 +160,6 @@
 
 ##  End - Set needed PHP configuration
 
-
 ##  Set Timezone on Server (if required)
 
 # The timezone for PHP and for the OS need to be set to UTC for sync integrations to work properly
@@ -179,7 +177,6 @@
     name: Etc/UTC
 
 ##  End Set Timezone on Server (if required)
-
 
 ##  Prepping directory for web application / site
 
@@ -204,7 +201,6 @@
     recurse: yes
 
 ##  End - Prepping directory for web application / site
-
 
 ##  Deploy files from Git repo
 
@@ -252,7 +248,6 @@
 
 ##  End - Deploy files from Git repo
 
-
 ##  Create and/or handle any DB related tasks
 
 - name: "Install Python MySQL bindings required for Ansible MySQL module"
@@ -278,7 +273,6 @@
     priv: '{{ git_download_wordpress_db_name }}.*:TRIGGER,CREATE ROUTINE,CREATE TEMPORARY TABLES,CREATE VIEW,ALTER ROUTINE,REFERENCES,EVENT,SHOW VIEW,EXECUTE,ALTER,DROP,CREATE,INDEX,SELECT,INSERT,UPDATE,DELETE'
     
 ##  End - Create and/or handle any DB related tasks
-
 
 ##  Handle any template files and schedulers/cron jobs
 
@@ -364,7 +358,6 @@
 
 ##  End - Handle any template files and schedulers/cron jobs
 
-
 ##  Trigger any application / site specific deployment tasks (if not handled elsewhere)
 
 - name: "Install Composer packages"
@@ -377,7 +370,6 @@
           and (git_download_wordpress_use_bedrock == true)
 
 ##  End - Trigger any application / site specific deployment tasks
-
 
 ##  Set proper permissions for web application / site
 
@@ -435,6 +427,3 @@
   notify: "restart webserver"
 
 ##  End - Set proper permissions for web application / site
-
-
-
